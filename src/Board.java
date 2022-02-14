@@ -15,10 +15,21 @@ public class Board {
     this.board = new char[DIM][DIM];
   }
 
+  public int getDIM() { return DIM; }
+
   public void init() {
     for (int i = 0; i < DIM; i++) {
       for (int j = 0; j < DIM; j++) {
         board[i][j] = ' ';
+      }
+    }
+  }
+
+  public void playerMove(int col) {
+    for (int i = DIM-1; i >= 0; i--) {
+      if (board[i][col] == ' ') {
+        board[i][col] = PLAYER;
+        break;
       }
     }
   }
