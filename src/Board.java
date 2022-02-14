@@ -1,34 +1,34 @@
 public class Board {
 
-  private final int ROW;
-  private final int COL;
-  private final int NUMPLAYERS;
+  private final int DIM;
+  private final int DISK;
+  private final int ORDER;
   private final char[][] board;
 
   private final char PLAYER = 'X';
   private final char COMPUTER = 'O';
 
-  public Board(int row, int col, int numPLayers) {
-    this.ROW = row;
-    this.COL = col;
-    this.NUMPLAYERS = numPLayers;
-    this.board = new char[row][col];
+  public Board(int dim, int disk, int order) {
+    this.DIM = dim;
+    this.DISK = disk;
+    this.ORDER = order;
+    this.board = new char[DIM][DIM];
   }
 
-  public void initBoard() {
-    for (int i = 0; i < ROW; i++) {
-      for (int j = 0; j < COL; j++) {
+  public void init() {
+    for (int i = 0; i < DIM; i++) {
+      for (int j = 0; j < DIM; j++) {
         board[i][j] = '.';
       }
     }
   }
 
-  public void printBoard() {
-    for (int i = 0; i < ROW; i++) {
+  public void print() {
+    for (int i = 0; i < DIM; i++) {
       System.out.print("|");
-      for (int j = 0; j < COL; j++) {
+      for (int j = 0; j < DIM; j++) {
         System.out.print(board[i][j]);
-        if (j != COL-1)
+        if (j != DIM-1)
           System.out.print(" ");
       }
       System.out.println("|");
