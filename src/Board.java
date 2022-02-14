@@ -18,21 +18,31 @@ public class Board {
   public void init() {
     for (int i = 0; i < DIM; i++) {
       for (int j = 0; j < DIM; j++) {
-        board[i][j] = '.';
+        board[i][j] = ' ';
       }
     }
   }
 
   public void print() {
     for (int i = 0; i < DIM; i++) {
-      System.out.print("|");
+      printDivider();
       for (int j = 0; j < DIM; j++) {
-        System.out.print(board[i][j]);
-        if (j != DIM-1)
+        System.out.print("| " + board[i][j]);
+        if (j < DIM-1)
           System.out.print(" ");
+        else
+          System.out.print(" |");
       }
-      System.out.println("|");
+      System.out.println();
+      if (i == DIM-1)
+        printDivider();
     }
   }
 
+  private void printDivider() {
+    for (int i = 0; i < DIM; i++) {
+      System.out.print("+---");
+    }
+    System.out.println("+");
+  }
 }
