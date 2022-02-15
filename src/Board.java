@@ -42,7 +42,7 @@ public class Board {
     public void print() {
 
         for (int i = 0; i < DIM; i++) {
-            System.out.print("  " + i + "\t");
+            System.out.print("  " + i + " ");
         }
         System.out.println("");
         for (int i = 0; i < DIM; i++) {
@@ -125,9 +125,59 @@ public class Board {
             count=0;
         }
 
-        //checking diagonally left top to right bottom
+        //checking diagonally top left to bottom right
+        //System.out.println("diagonal check");
+        int row,col;
+        count=0;
+        for(int i=0;i<DIM;i++) {
+            for(int j=0;j<DIM;j++) {
+                row=i;
+                col=j;
+                while (row < DIM && col < DIM) {
 
+                    if (grid[row][col]!=' ' && grid[row][col] == val) {
+                        count++;
+                        //System.out.println("count is "+ count + " DISK is "+ DISK);
+                        if(count == DISK)
+                            return true;
+                    }
+                    else
+                    {
+                        count=0;
+                    }
+                    row++;
+                    col++;
+                }
+                count=0;
+            }
 
+        }
+
+        //checking diagonally top right to bottom left
+        count=0;
+        for(int i=DIM-1;i>=0;i--) {
+            for(int j=DIM-1;j>=0;j--) {
+                row=i;
+                col=j;
+                while (row >=0  && col <DIM ) {
+
+                    if (grid[row][col]!=' ' && grid[row][col] == val) {
+                        count++;
+                        //System.out.println("count is "+ count + " DISK is "+ DISK);
+                        if(count == DISK)
+                            return true;
+                    }
+                    else
+                    {
+                        count=0;
+                    }
+                    row--;
+                    col++;
+                }
+                count=0;
+            }
+
+        }
         return false;
     }
 

@@ -45,7 +45,7 @@ public class ConnectM {
         }
 
         while (true) {
-            clearScreen();
+         //   clearScreen();
             if (turn == 1) {
                 System.out.println("Human turn");
                 move=player.getMove(connectM.board);
