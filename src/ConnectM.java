@@ -24,7 +24,7 @@ public class ConnectM {
     }
 
     public static void gameLoop(String[] args) throws IOException {
-
+        clearScreen();
         Scanner in = new Scanner(System.in);
         int turn = 1; //setting turn for human to start
         int move; // store the human move
@@ -37,6 +37,7 @@ public class ConnectM {
                 Integer.parseInt(args[2]));
 
         connectM.board.init();
+        System.out.println("Initial Board:");
         connectM.board.print();
 
         //setting turn for computer to start
@@ -45,36 +46,37 @@ public class ConnectM {
         }
 
         while (true) {
-         //   clearScreen();
+
             if (turn == 1) {
-                System.out.println("Human turn");
+                System.out.print("Your turn: ");
                 move=player.getMove(connectM.board);
                 connectM.board.updateBoard(move,turn);
                 connectM.board.print();
                 if(connectM.board.checkWinner(turn))
                 {
-                    System.out.println("You won!");
+                    System.out.println("\nYou Won!!\n");
                     break;
                 }
                 if(connectM.board.isBoardFull())
                 {
-                    System.out.println("Board is full, its a draw!");
+                    System.out.println("\nBoard is full, its a draw!\n");
                     break;
                 }
                 turn = 2; //passing control to computer
             } else {
-                System.out.println("Computer turn");
+                //System.out.println("Computer turn");
                 move=computer.computerMove(connectM.board);
+                System.out.println("\nComputer move is: "+ move);
                 connectM.board.updateBoard(move,turn);
                 connectM.board.print();
                 if(connectM.board.checkWinner(turn))
                 {
-                    System.out.println("Computer won!");
+                    System.out.println("\nComputer Won!!\n");
                     break;
                 }
                 if(connectM.board.isBoardFull())
                 {
-                    System.out.println("Board is full, its a draw!");
+                    System.out.println("\nBoard is full, its a draw!\n");
                     break;
                 }
                 turn = 1; //passing control to human

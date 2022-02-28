@@ -15,6 +15,26 @@ public class Board {
         this.grid = new char[DIM][DIM];
     }
 
+    public Board(Board board1)
+    {
+        this.DIM=board1.getDim();
+        this.DISK = board1.getDisk();
+        this.ORDER = board1.getOrder();
+        this.grid =new char[DIM][DIM];
+        for(int i=0;i<DIM;i++)
+        {
+            for(int j=0;j<DIM;j++)
+            {
+                this.grid[i][j]=board1.getGridVal(i,j);
+            }
+        }
+    }
+
+    public char[][] getGrid()
+    {
+        return grid;
+    }
+
     public int getDim() {
         return this.DIM;
     }
@@ -27,7 +47,7 @@ public class Board {
         return this.ORDER;
     }
 
-    public int getGridVal(int row, int col) {
+    public char getGridVal(int row, int col) {
         return grid[row][col];
     }
 
@@ -70,6 +90,7 @@ public class Board {
     //Update the board for both computer and human based on the move
     public void updateBoard(int move, int turn) {
         char val = turn == 1 ? HUMAN : COMPUTER;
+        //System.out.println(" move: "+ move + " turn "+ turn);
         for (int i = DIM - 1; i >= 0; i--) {
             if (grid[i][move] == ' ') {
                 grid[i][move] = val;
