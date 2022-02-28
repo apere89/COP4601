@@ -1,18 +1,33 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class Board {
 
     private final int DIM;
     private final int DISK;
     private final int ORDER;
-    private final char[][] grid;
+    private char[][] grid;
+    private int[] height;
+    private int totalMoves;
 
-    private final char HUMAN = 'X';
-    private final char COMPUTER = 'O';
+    public static final char HUMAN = 'X';
+    public static final char COMPUTER = 'O';
 
     public Board(int dim, int disk, int order) {
         this.DIM = dim;
         this.DISK = disk;
         this.ORDER = order;
         this.grid = new char[DIM][DIM];
+        this.height = new int[DIM];
+        this.totalMoves = 0;
+    }
+
+    public Board(Board board) {
+        this(board.DIM, board.DISK, board.ORDER);
+        this.totalMoves = board.totalMoves;
+        this.height = board.height.clone();
+        for (int i = 0; i < DIM; i++)
+            this.grid[i] = board.grid[i].clone();
     }
 
     public int getDim() {
@@ -180,6 +195,41 @@ public class Board {
         }
         return false;
     }
+
+    public boolean goodPlay(int move) {
+        return this.height[move] < DIM;
+    }
+
+    public void makePlay(int move) {
+        char currentMark = 1 + totalMoves%2 == 0 ? 'O' : 'X';
+
+        this.grid[DIM-1-height[move]][move] = currentMark;
+        height[move]++;
+        totalMoves++;
+    }
+
+    public boolean checkWinningMove(int move) {
+        char currentMark = 1 + totalMoves%2 == 0 ? 'X' : 'O';
+
+        if (height[move] >= 3
+                && grid[move][height[move]-1] == currentMark
+                && grid[move][height[move]-2] == currentMark
+                && grid[move][height[move]-3] == currentMark)
+            return true;
+
+        for(int dy = -1; dy <=1; dy++) {
+            int nb = 0;
+            for(int dx = -1; dx <=1; dx += 2)
+                for(int x = move+dx, y = height[move]+dx*dy; x >= 0 && x < DIM && y >= 0 && y < DIM && grid[x][y] == currentMark; nb++) {
+                    x += dx;
+                    y += dx*dy;
+                }
+            if(nb >= 3) return true;
+        }
+        return false;
+    }
+
+    public int getTotalMoves() { return totalMoves; }
 
 
 }

@@ -28,8 +28,8 @@ public class ConnectM {
         Scanner in = new Scanner(System.in);
         int turn = 1; //setting turn for human to start
         int move; // store the human move
-        Player player=new Player();
-        Player computer=new Player();
+        Player player = new Player(Board.HUMAN);
+        Player computer=new Player(Board.COMPUTER);
 
         ConnectM connectM = new ConnectM(
                 Integer.parseInt(args[0]),
@@ -41,15 +41,15 @@ public class ConnectM {
 
         //setting turn for computer to start
         if (connectM.board.getOrder() == 0) {
-            turn = 2;
+            turn = 0;
         }
 
         while (true) {
          //   clearScreen();
-            if (turn == 1) {
+            if (turn == 0) {
                 System.out.println("Human turn");
                 move=player.getMove(connectM.board);
-                connectM.board.updateBoard(move,turn);
+                connectM.board.makePlay(move);
                 connectM.board.print();
                 if(connectM.board.checkWinner(turn))
                 {
@@ -61,11 +61,11 @@ public class ConnectM {
                     System.out.println("Board is full, its a draw!");
                     break;
                 }
-                turn = 2; //passing control to computer
+                turn = 1; //passing control to computer
             } else {
                 System.out.println("Computer turn");
                 move=computer.computerMove(connectM.board);
-                connectM.board.updateBoard(move,turn);
+                connectM.board.makePlay(move);
                 connectM.board.print();
                 if(connectM.board.checkWinner(turn))
                 {
@@ -77,7 +77,7 @@ public class ConnectM {
                     System.out.println("Board is full, its a draw!");
                     break;
                 }
-                turn = 1; //passing control to human
+                turn = 0; //passing control to human
             }
 
         }
