@@ -59,6 +59,7 @@ public class Board {
         }
     }
 
+    //function to display board
     public void print() {
 
         for (int i = 0; i < DIM; i++) {
@@ -200,6 +201,28 @@ public class Board {
 
         }
         return false;
+    }
+
+    //Function to check if the board is full or if there is a winner for multiplayer game
+    public boolean multiplayer_winner_check(int self,int opp)
+    {
+        boolean game_over=false;
+        if(checkWinner(opp))
+        {
+            System.out.println("Your opponent won!");
+            game_over=true;
+        }
+        else if(checkWinner(self))
+        {
+            System.out.println("You won!");
+            game_over=true;
+        }
+        else if (isBoardFull())
+        {
+            System.out.println("The board is full! Its a Draw!");
+            game_over=true;
+        }
+        return game_over;
     }
 
 
