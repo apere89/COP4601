@@ -4,8 +4,10 @@ import java.util.Scanner;
 public class ConnectM {
 
     private final Board board;
+    private static boolean isMultiplayer = false;
 
     public ConnectM(int dim, int disk, int order) {
+
         board = new Board(dim, disk, order);
     }
 
@@ -17,9 +19,49 @@ public class ConnectM {
         }
 
         try {
-            gameLoop(args);
+            if (isMultiplayer)
+                multiplayerLoop(args);
+            else
+                gameLoop(args);
         } catch (IOException e) {
             System.out.println("Error in game loop: " + e.getMessage());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void multiplayerLoop(String[] args) throws InterruptedException {
+        String address = args[3];
+        int port = Integer.parseInt(args[4]);
+
+        boolean isServer = Integer.parseInt(args[2]) == 0;
+
+        ConnectM connectM = new ConnectM(
+                Integer.parseInt(args[0]),
+                Integer.parseInt(args[1]),
+                Integer.parseInt(args[2]));
+
+        if (isServer) {
+            Player serverPlayer = new Player();
+
+            GameServer server = new GameServer(address, port, connectM.board, serverPlayer);
+
+            server.start();
+
+            while(!server.shutdown) {
+                Thread.sleep(2000);
+            }
+        }
+        else {
+            Player clientPlayer = new Player();
+
+            GameClient client = new GameClient(address, port, connectM.board, clientPlayer);
+
+            client.start();
+
+            while(!client.shutdown) {
+                Thread.sleep(2000);
+            }
         }
     }
 
@@ -87,12 +129,25 @@ public class ConnectM {
 
     public static boolean validateArgs(String[] args) {
         if (args == null) { return false; }
-        boolean valid = args.length == 3; //validate we get 3 args
+        if (args.length != 3 && args.length != 5) { return false; }
+
+        boolean valid = true;
+
         // validate right values in args
         if (valid && !args[0].matches("^\\b([3-9]|1[0])\\b")) { valid = false; }
         if (valid && !args[1].matches("^\\b([1-9]|1[0])\\b")) { valid = false; }
         if (valid && !args[2].matches("^\\b([0-1])\\b")) { valid = false; }
         if (valid && Integer.parseInt(args[1]) > Integer.parseInt(args[0])) { valid = false; }
+
+        if (args.length == 5) {
+            if (!valid && args[3].matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")) { valid = false; }
+            if (!valid && args[4].matches(
+                    "^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$")) {
+                valid = false;
+            }
+            if (valid)
+                isMultiplayer = true;
+        }
 
         return valid;
     }
@@ -100,6 +155,8 @@ public class ConnectM {
     public static void usage() {
         System.out.println("Connect4 game. Enter valid inputs to start");
         System.out.println("usage: connectM [dimensions] [disks to connect] [Player or PC turn, 0 or 1]");
+        System.out.println("usage: connectM [dimensions] [disks to connect] [IP] [Port]");
+
     }
 
     public static void clearScreen() {
